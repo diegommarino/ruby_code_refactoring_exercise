@@ -10,3 +10,4 @@ gem "factory_bot"
 gem "faker"
 
 gem "pry"
+gem "rake"
