@@ -1,7 +1,9 @@
 # Code refactoring exercise
 
-Before start refactoring the code I built all the tests for it, so I could garantee
-that I would not change the original functions output.
+The code that was refactored was the [car_rental_initial.rb](https://github.com/diegommarino/ruby_code_refactoring_exercise/blob/master/car_rental_initial.rb) file. The refactored code is the [car_rental.rb](https://github.com/diegommarino/ruby_code_refactoring_exercise/blob/master/car_rental.rb).
+
+Before start refactoring the code I built all the tests for the initial file, so I could garantee
+that I would not change the original functions output, or the codes would break.
 
 ## Running the tests
 
