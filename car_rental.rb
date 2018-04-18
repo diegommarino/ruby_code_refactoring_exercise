@@ -68,19 +68,34 @@ class Driver
     @rentals << rental
   end
 
+  def total_amount
+    @rentals.sum(&:amount)
+  end
+
+  def total_bonus_points
+    @rentals.sum(&:bonus_points)
+  end
+
   def statement
-    total = 0
-    bonus_points = 0
     result = "Car rental record for #{@name}\n"
 
-    @rentals.each do |r|
-      result += "#{r.car.title}, #{r.amount}\n"
-      total += r.amount
-      bonus_points += r.bonus_points
-    end
+    @rentals.each { |r| result += "#{r.car.title}, #{r.amount}\n" }
 
-    result += "Amount owed is €#{total}\n"
-    result += "Earned bonus points: #{bonus_points}"
+    result += "Amount owed is €#{total_amount}\n"
+    result += "Earned bonus points: #{total_bonus_points}"
     result
+  end
+
+  def json_statement
+    require 'json'
+    rentals = @rentals.map { |r| { car: r.car.title, amount: r.amount } }
+    hash_response = {
+      name: @name,
+      amount: total_amount,
+      points: total_bonus_points,
+      rentals: rentals,
+      message: statement
+    }
+    JSON.generate(hash_response)
   end
 end

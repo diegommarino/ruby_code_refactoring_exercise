@@ -17,10 +17,10 @@ RSpec.describe Rental, :model do
   end
 
   describe 'methods' do
-    let(:driver) { build(:driver, 'John') }
-    let(:car_saloon) { build(:car, title: 'Car', style: :saloon) }
-    let(:car_suv) { build(:car, title: 'Car', style: :suv) }
-    let(:car_hatchback) { build(:car, title: 'Car', style: :hatchback) }
+    let(:driver) { build(:driver) }
+    let(:car_saloon) { build(:car, style: :saloon) }
+    let(:car_suv) { build(:car, style: :suv) }
+    let(:car_hatchback) { build(:car, style: :hatchback) }
 
     describe '#bonus_points' do
       context 'for SALOON (0) car style' do

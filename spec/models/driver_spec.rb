@@ -2,12 +2,30 @@ require 'spec_helper'
 
 RSpec.describe Driver, :model do
   describe 'methods' do
-    describe '#statement' do
-      let(:driver) { build(:driver, name: 'John') }
-      let(:car_saloon) { build(:car, title: 'Car', style: :saloon) }
-      let(:car_suv) { build(:car, title: 'Car', style: :suv) }
-      let(:car_hatchback) { build(:car, title: 'Car', style: :hatchback) }
+      let(:driver) { build(:driver) }
+      let(:car_saloon) { build(:car, style: :saloon) }
+      let(:car_suv) { build(:car, style: :suv) }
+      let(:car_hatchback) { build(:car, style: :hatchback) }
 
+    describe '#total_amount' do
+      it 'should returned the total amount from driver rentals' do
+        driver.add_rental(build(:rental, car: car_saloon, days_rented: 1)) # €20
+        driver.add_rental(build(:rental, car: car_suv, days_rented: 1)) # €30
+        driver.add_rental(build(:rental, car: car_hatchback, days_rented: 1)) # €15
+        expect(driver.total_amount).to eq 20 + 30 + 15
+      end
+    end
+
+    describe '#total_bonus_points' do
+      it 'should returned acumulated points from driver rentals' do
+        driver.add_rental(build(:rental, car: car_saloon, days_rented: 10)) # 1 point
+        driver.add_rental(build(:rental, car: car_suv, days_rented: 10)) # 2 points
+        driver.add_rental(build(:rental, car: car_hatchback, days_rented: 10)) # 1 point
+        expect(driver.total_bonus_points).to eq 1 + 2 + 1
+      end
+    end
+
+    describe '#statement' do
       context 'bonus points' do
         context 'for SALOON (0) car style' do
           it 'should earn 1 point no matter how many rent days' do
@@ -120,6 +138,33 @@ RSpec.describe Driver, :model do
           driver.add_rental(build(:rental, car: car_hatchback, days_rented: 10)) # 1 point
           expect(driver.statement).to include "Earned bonus points: #{1 + 2 + 1}"
         end
+      end
+    end
+
+    describe  '#json_statement' do
+      it 'should return a statement in a JSON format' do
+        driver = build(:driver, name: 'Driver')
+        car_saloon = build(:car, title: 'Car 1', style: :saloon)
+        car_suv = build(:car, title: 'Car 2', style: :suv)
+        car_hatchback = build(:car, title: 'Car 3', style: :hatchback)
+        driver.add_rental(build(:rental, car: car_saloon, days_rented: 1))
+        driver.add_rental(build(:rental, car: car_suv, days_rented: 1))
+        driver.add_rental(build(:rental, car: car_hatchback, days_rented: 1))
+
+        expected_parsed_json = {
+          'name' => 'Driver',
+          'amount' => 65,
+          'points' => 3,
+          'rentals' => [
+            { 'car' => 'Car 1', 'amount' => 20 },
+            { 'car' => 'Car 2', 'amount' => 30 },
+            { 'car' => 'Car 3', 'amount' => 15 }
+          ],
+          'message' => driver.statement
+        }
+
+        require 'json'
+        expect(JSON.parse(driver.json_statement)).to eq expected_parsed_json
       end
     end
   end
