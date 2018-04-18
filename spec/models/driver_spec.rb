@@ -27,7 +27,7 @@ RSpec.describe Driver, :model do
 
     describe '#statement' do
       context 'bonus points' do
-        context 'for SALOON (0) car style' do
+        context 'for :saloon car style' do
           it 'should earn 1 point no matter how many rent days' do
             rental = build(:rental, car: car_saloon, days_rented: 10)
             driver.add_rental(rental)
@@ -35,7 +35,7 @@ RSpec.describe Driver, :model do
           end
         end
 
-        context 'for SUV (1) car style' do
+        context 'for :suv car style' do
           it 'should earn 1 point for 1 day rent' do
             rental = build(:rental, car: car_suv, days_rented: 1)
             driver.add_rental(rental)
@@ -49,7 +49,7 @@ RSpec.describe Driver, :model do
           end
         end
 
-        context 'for HATCHBACK (2) car style' do
+        context 'for :hatchback car style' do
           it 'should earn 1 point no matter how many rent days' do
             rental = build(:rental, car: car_hatchback, days_rented: 10)
             driver.add_rental(rental)

@@ -38,15 +38,15 @@ class Rental
 
   def amount
     amount = 0
-    case Car::CAR_STYLES[car.style]
-    when Car::CAR_STYLES[:suv]
+    case car.style
+    when :suv
       amount += days_rented * 30
-    when Car::CAR_STYLES[:hatchback]
+    when :hatchback
       amount += 15
       if days_rented > 3
         amount += (days_rented - 3) * 15
       end
-    when Car::CAR_STYLES[:saloon]
+    when :saloon
       amount += 20
       if days_rented > 2
         amount += (days_rented - 2) * 15
